@@ -60,9 +60,8 @@ public class OrderServiceImpl implements OrderService {
 
         orderItems = orderItemRepository.saveAll(orderItems);
         order.setTotalPrice(totalPrice);
-        order.setOrderItems(new HashSet<>(orderItems));
-
         orderRepository.save(order);
+        order.setOrderItems(new HashSet<>(orderItems));
         return order;
     }
 

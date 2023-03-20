@@ -1,6 +1,7 @@
 package fpt.edu.shopping.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,9 +20,11 @@ public class OrderItem implements Serializable {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonBackReference
     private Product product;
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference
     private Order order;
     private Long quantity;
 }
