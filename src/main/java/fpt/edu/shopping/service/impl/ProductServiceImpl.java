@@ -1,6 +1,7 @@
 package fpt.edu.shopping.service.impl;
 
 import fpt.edu.shopping.entity.Product;
+import fpt.edu.shopping.model.ProductRequest;
 import fpt.edu.shopping.repository.ProductRepository;
 import fpt.edu.shopping.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void createProduct(Product product) {
+    public void createProduct(ProductRequest productRequest) {
+        Product product = new Product();
+        product.setPrice(productRequest.getPrice());
+        product.setName(productRequest.getName());
+        product.setDescription(product.getDescription());
+        product.setQuantity(productRequest.getQuantity());
+        product.setType(productRequest.getType());
+        product.setCreatedAt(Instant.now());
+        product.setUpdatedAt(Instant.now());
         productRepository.save(product);
     }
 
@@ -37,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(Product product) {
+    public void updateProduct(ProductRequest product) {
         Product productFind = productRepository.findById(product.getId()).orElseThrow(() -> new RuntimeException("Not found product"));
         productFind.setName(product
                 .getName());

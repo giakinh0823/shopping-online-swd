@@ -1,6 +1,7 @@
 package fpt.edu.shopping.controller.api;
 
 import fpt.edu.shopping.entity.Product;
+import fpt.edu.shopping.model.ProductRequest;
 import fpt.edu.shopping.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/create")
-    public void addTour(@RequestBody Product product) {
+    public void addTour(@RequestBody ProductRequest product) {
         productService.createProduct(product);
     }
 
@@ -37,13 +38,13 @@ public class ProductController {
     }
 
     @PutMapping("/create")
-    public ResponseEntity<?> createProduct(@RequestBody Product product) {
+    public ResponseEntity<?> createProduct(@RequestBody ProductRequest product) {
         productService.createProduct(product);
         return new ResponseEntity<>("Create product success", HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateProduct(@RequestBody Product product) {
+    public ResponseEntity<?> updateProduct(@RequestBody ProductRequest product) {
         productService.updateProduct(product);
         return new ResponseEntity<>("update product success", HttpStatus.OK);
     }
