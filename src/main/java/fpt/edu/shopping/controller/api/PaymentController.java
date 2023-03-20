@@ -23,4 +23,9 @@ public class PaymentController {
     public void paymentSuccess(@PathVariable("orderId") Long orderId) {
         stripeService.paymentSuccess(orderId);
     }
+
+    @GetMapping("/payment/bill/cancel/{orderId}")
+    public void paymentCancel(@PathVariable("orderId") Long orderId) {
+        stripeService.paymentCancel(orderId);
+    }
 }

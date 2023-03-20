@@ -69,4 +69,13 @@ public class StripeService {
             orderRepository.save(order);
         }
     }
+
+    public void paymentCancel(Long orderId) {
+        Optional<Order> optional = orderRepository.findById(orderId);
+        if(optional.isPresent()){
+            Order order = optional.get();
+            order.setStatus(OrderStatus.FAILED);
+            orderRepository.save(order);
+        }
+    }
 }
