@@ -1,12 +1,13 @@
 package fpt.edu.shopping.service;
 
 import fpt.edu.shopping.entity.Order;
+import fpt.edu.shopping.model.OrderRequest;
 
 import java.util.List;
 
 public interface OrderService {
 
-    void create(Order orders);
+    Order create(OrderRequest request);
 
     List<Order> getAll();
 
