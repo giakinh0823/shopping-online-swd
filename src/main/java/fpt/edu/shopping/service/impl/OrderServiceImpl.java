@@ -10,6 +10,7 @@ import fpt.edu.shopping.repository.OrderRepository;
 import fpt.edu.shopping.repository.ProductRepository;
 import fpt.edu.shopping.service.OrderService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -66,16 +68,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAll() {
-        return null;
+        return orderRepository.findAll();
     }
 
     @Override
     public void update(Order order) {
-
+        Order orderFind = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Not found order"));
+        orderFind.setOrderItems(order
+                .getOrderItems());
+        orderFind.setStatus(order.getStatus());
+        orderFind.setTotalPrice(order.getTotalPrice());
+        orderFind.setCreatedAt(order.getCreatedAt());
+        orderFind.setUpdatedAt(order.getUpdatedAt());
+        orderRepository.save(orderFind);
     }
 
     @Override
     public void delete(Long orderId) {
-
+        orderRepository.deleteById(orderId);
     }
 }
