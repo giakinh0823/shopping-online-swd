@@ -1,6 +1,6 @@
 package io.getarrays.userservice.service;
 
-import io.getarrays.userservice.domain.Product;
+import io.getarrays.userservice.entity.Product;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

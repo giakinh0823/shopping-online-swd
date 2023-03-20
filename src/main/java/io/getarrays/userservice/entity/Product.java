@@ -1,17 +1,14 @@
-package io.getarrays.userservice.domain;
+package io.getarrays.userservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.time.Instant;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,6 +22,9 @@ public class Product {
     private String type;
     private String description;
     private double price;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<OrderItem> orderItems = new HashSet<>();}
+    private Set<OrderItem> orderItems = new HashSet<>();
+    
+    private Instant createdAt;
+    private Instant updatedAt;
+}

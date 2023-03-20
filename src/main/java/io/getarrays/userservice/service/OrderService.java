@@ -1,7 +1,6 @@
 package io.getarrays.userservice.service;
 
-import io.getarrays.userservice.domain.Order;
-import org.springframework.data.domain.Pageable;
+import io.getarrays.userservice.entity.Order;
 
 import java.util.List;
 

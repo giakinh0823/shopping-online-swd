@@ -1,4 +1,4 @@
-package io.getarrays.userservice.repository.impl;
+package io.getarrays.userservice.service.impl;
 
 import io.getarrays.userservice.repository.OrderItemRepository;
 import io.getarrays.userservice.service.OrderItemService;

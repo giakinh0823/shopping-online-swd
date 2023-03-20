@@ -1,8 +1,8 @@
-package io.getarrays.userservice.api;
+package io.getarrays.userservice.controller.api;
 
-import io.getarrays.userservice.domain.Product;
+import io.getarrays.userservice.entity.Product;
 import io.getarrays.userservice.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/products")
-public class ProductResource {
-    @Autowired
-    ProductService productService;
+public class ProductController {
+    private final ProductService productService;
 
     @PostMapping("/create")
     public void addTour(@RequestBody Product product) {
@@ -25,20 +25,22 @@ public class ProductResource {
     @GetMapping("/list")
     public ResponseEntity<List<Product>> getAllProducts(@RequestParam("page") int page,
                                                         @RequestParam("limit") int limit
-    ){
+    ) {
         Pageable pageable = PageRequest.of(page, limit);
         return new ResponseEntity<>(productService.findAllProductByPage(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable Long id){
+    public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         return new ResponseEntity<>(productService.findProduct(id), HttpStatus.OK);
     }
+
     @PutMapping("/create")
     public ResponseEntity<?> createProduct(@RequestBody Product product) {
         productService.createProduct(product);
         return new ResponseEntity<>("Create product success", HttpStatus.CREATED);
     }
+
     @PutMapping("/update")
     public ResponseEntity<?> updateProduct(@RequestBody Product product) {
         productService.updateProduct(product);

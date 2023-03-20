@@ -1,6 +1,6 @@
 package io.getarrays.userservice.service;
 
 
-public interface OrderItemService{
+public interface OrderItemService {
 
 }

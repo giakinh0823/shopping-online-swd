@@ -1,6 +1,6 @@
 package io.getarrays.userservice.repository;
 
-import io.getarrays.userservice.domain.Order;
+import io.getarrays.userservice.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

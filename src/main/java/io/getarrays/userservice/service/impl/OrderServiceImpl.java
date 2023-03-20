@@ -1,6 +1,6 @@
-package io.getarrays.userservice.repository.impl;
+package io.getarrays.userservice.service.impl;
 
-import io.getarrays.userservice.domain.Order;
+import io.getarrays.userservice.entity.Order;
 import io.getarrays.userservice.repository.OrderRepository;
 import io.getarrays.userservice.service.OrderService;
 import lombok.AllArgsConstructor;

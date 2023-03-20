@@ -1,4 +1,4 @@
-package io.getarrays.userservice.api;
+package io.getarrays.userservice.controller.api;
 
 import io.getarrays.userservice.service.OrderService;
 import lombok.AllArgsConstructor;
@@ -11,6 +11,5 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class PayPalController {
     private final OrderService orderService;
-
 
 }
