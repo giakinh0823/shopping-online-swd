@@ -23,5 +23,5 @@ public class OrderItem implements Serializable {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    private Double quantity;
+    private Long quantity;
 }
