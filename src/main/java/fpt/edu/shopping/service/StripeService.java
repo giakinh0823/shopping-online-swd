@@ -50,7 +50,7 @@ public class StripeService {
                                 .setCurrency("VND")
                                 .setUnitAmount(order.getTotalPrice())
                                 .setProductData(SessionCreateParams.LineItem.PriceData.ProductData
-                                        .builder().setName("Macbook Pro M2 2023").build())
+                                        .builder().setName("Thanh toán đơn hàng " + orderId).build())
                                 .build())
                         .build())
                 .build();

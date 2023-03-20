@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.setQuantity(data.getQuantity());
                 orderItems.add(orderItem);
 
-                totalPrice += product.getPrice();
+                totalPrice += product.getPrice() * data.getQuantity();
             }
         }
 

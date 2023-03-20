@@ -22,12 +22,12 @@ public class PaymentController {
     @GetMapping("/payment/bill/success/{orderId}")
     public ResponseEntity<String> paymentSuccess(@PathVariable("orderId") Long orderId) {
         stripeService.paymentSuccess(orderId);
-        return ResponseEntity.ok("Error");
+        return ResponseEntity.ok("Payment Success order: "+ orderId);
     }
 
     @GetMapping("/payment/bill/cancel/{orderId}")
     public ResponseEntity<String> paymentCancel(@PathVariable("orderId") Long orderId) {
         stripeService.paymentCancel(orderId);
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok("Payment Error order: " + orderId);
     }
 }
