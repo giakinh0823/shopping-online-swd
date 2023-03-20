@@ -18,4 +18,9 @@ public class PaymentController {
     public ResponseEntity<PaymentStripeResponse> createPaymentLink(@PathVariable("orderId") Long orderId) throws StripeException {
         return ResponseEntity.ok(stripeService.createLinkPayment(orderId));
     }
+
+    @GetMapping("/payment/bill/success/{orderId}")
+    public void paymentSuccess(@PathVariable("orderId") Long orderId) {
+        stripeService.paymentSuccess(orderId);
+    }
 }

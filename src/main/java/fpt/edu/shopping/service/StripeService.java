@@ -1,11 +1,11 @@
 package fpt.edu.shopping.service;
 
-import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import fpt.edu.shopping.config.stripe.StripeConfig;
+import fpt.edu.shopping.constant.OrderStatus;
 import fpt.edu.shopping.entity.Order;
 import fpt.edu.shopping.model.PaymentStripeResponse;
 import fpt.edu.shopping.repository.OrderRepository;
@@ -26,12 +26,10 @@ public class StripeService {
 
     private final OrderRepository orderRepository;
     private final StripeConfig stripeConfig;
-    private final Gson gson;
 
-    public StripeService(OrderRepository orderRepository, StripeConfig stripeConfig, Gson gson) {
+    public StripeService(OrderRepository orderRepository, StripeConfig stripeConfig) {
         this.stripeConfig = stripeConfig;
         this.orderRepository = orderRepository;
-        this.gson = gson;
     }
 
     public PaymentStripeResponse createLinkPayment(Long orderId) throws StripeException {
@@ -61,5 +59,14 @@ public class StripeService {
         return PaymentStripeResponse.builder()
                 .url(session.getUrl())
                 .build();
+    }
+
+    public void paymentSuccess(Long orderId) {
+        Optional<Order> optional = orderRepository.findById(orderId);
+        if(optional.isPresent()){
+            Order order = optional.get();
+            order.setStatus(OrderStatus.SUCCESS);
+            orderRepository.save(order);
+        }
     }
 }
