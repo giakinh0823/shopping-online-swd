@@ -1,81 +1,65 @@
 package fpt.edu.shopping.service;
 
+import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentLink;
-import com.stripe.model.Price;
-import com.stripe.param.PaymentLinkCreateParams;
-import com.stripe.param.PriceCreateParams;
-import com.stripe.param.ProductCreateParams;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
 import fpt.edu.shopping.config.stripe.StripeConfig;
+import fpt.edu.shopping.entity.Order;
+import fpt.edu.shopping.model.PaymentStripeResponse;
+import fpt.edu.shopping.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class StripeService {
-    private StripeConfig stripeConfig;
-
     @Value("${stripe.success_url}")
     private String successUrl;
 
     @Value("${stripe.cancel_url}")
     private String cancelUrl;
 
-    public StripeService(StripeConfig stripeConfig) {
+    private final OrderRepository orderRepository;
+    private final StripeConfig stripeConfig;
+    private final Gson gson;
+
+    public StripeService(OrderRepository orderRepository, StripeConfig stripeConfig, Gson gson) {
         this.stripeConfig = stripeConfig;
+        this.orderRepository = orderRepository;
+        this.gson = gson;
     }
 
-    public String createLinkPayment(Long orderId) throws StripeException {
+    public PaymentStripeResponse createLinkPayment(Long orderId) throws StripeException {
         Stripe.apiKey = stripeConfig.apiKey;
 
-        if (orderId == null) {
-            throw new RuntimeException("OrderId not found");
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isEmpty()) {
+            throw new RuntimeException("Not found order");
         }
-        ProductCreateParams paramsProduct =
-                ProductCreateParams.builder()
-                        .setName("Macbook M2 2023")
-                        .setCaption("Macbook apple pro max free 50% discount")
-                        .setDescription("Macbook apple pro max free 50% discount")
-                        .build();
+        Order order = optionalOrder.get();
 
-        PriceCreateParams paramsPrice =
-                PriceCreateParams
-                        .builder()
-                        .setCurrency("usd")
-                        .setUnitAmount(1000L)
-                        .setProduct(paramsProduct.getId())
-                        .build();
+        SessionCreateParams params = SessionCreateParams.builder()
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .setMode(SessionCreateParams.Mode.PAYMENT).setSuccessUrl(successUrl + order.getId())
+                .setCancelUrl(cancelUrl + order.getId())
+                .addLineItem(SessionCreateParams.LineItem.builder().setQuantity(10L)
+                        .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
+                                .setCurrency("VND")
+                                .setUnitAmount(order.getTotalPrice())
+                                .setProductData(SessionCreateParams.LineItem.PriceData.ProductData
+                                        .builder().setName("Macbook Pro M2 2023").build())
+                                .build())
+                        .build())
+                .build();
 
-        Price price = Price.create(paramsPrice);
-
-        PaymentLinkCreateParams paramsLinks =
-                PaymentLinkCreateParams
-                        .builder()
-                        .addLineItem(
-                                PaymentLinkCreateParams.LineItem
-                                        .builder()
-                                        .setPrice(price.getId())
-                                        .setQuantity(1L)
-                                        .build()
-                        ).setAfterCompletion(
-                                PaymentLinkCreateParams.AfterCompletion
-                                        .builder()
-                                        .setType(PaymentLinkCreateParams.AfterCompletion.Type.REDIRECT)
-                                        .setRedirect(
-                                                PaymentLinkCreateParams.AfterCompletion.Redirect
-                                                        .builder()
-                                                        .setUrl("https://gurucoding.org/" + orderId)
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .build();
-        ;
-
-
-        PaymentLink paymentLink = PaymentLink.create(paramsLinks);
-        return paymentLink.getUrl();
+        Session session = Session.create(params);
+        return PaymentStripeResponse.builder()
+                .url(session.getUrl())
+                .build();
     }
 }

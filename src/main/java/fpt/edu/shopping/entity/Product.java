@@ -21,7 +21,7 @@ public class Product {
     private int quantity;
     private String type;
     private String description;
-    private double price;
+    private Long price;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems = new HashSet<>();
 
